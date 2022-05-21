@@ -13,12 +13,14 @@ class MagazineVC: UIViewController {
     var name = String()
     var comics = [MarvelMagazine]()
 
+    var presenter: DetailViewPresenterProtocol?
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter?.getComics()
 
         view.addSubview(magazine)
         view.backgroundColor = .systemBackground
-        configure()
     }
 
     init(with name: String, and comics: MarvelComics) {
@@ -28,15 +30,23 @@ class MagazineVC: UIViewController {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError()
     }
 
-    private func configure() {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+}
+
+extension MagazineVC: DetailViewProtocol {
+    func setComics(comic: [MarvelMagazine]) {
         var comicsName = "Комиксы с участием " + name + ":\n"
-        comics.forEach { comics in
+
+        comic.forEach { comics in
             comicsName += "\n" + comics.name
         }
+
         magazine.comicsDescription.text = comicsName
-        
     }
 }
