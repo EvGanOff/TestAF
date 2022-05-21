@@ -1,5 +1,5 @@
 //
-//  URLconfiguration.swift
+//  URLConfiration.swift
 //  TestAF
 //
 //  Created by Евгений Ганусенко on 5/13/22.

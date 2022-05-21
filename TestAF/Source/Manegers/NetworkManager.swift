@@ -8,6 +8,10 @@
 import UIKit
 import Alamofire
 
+protocol NetworkManagerProtocol {
+    func getHerousFromURL(completion: @escaping (Result<[MarvelCharacter], AFErrors>) -> ())
+}
+
 class NetworkManager: NetworkManagerProtocol {
     let decoder = JSONDecoder()
     let configuration = URLConfiration()

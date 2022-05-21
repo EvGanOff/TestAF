@@ -7,23 +7,17 @@
 
 import UIKit
 
-protocol NetworkManagerProtocol {
-    func getHerousFromURL(completion: @escaping (Result<[MarvelCharacter], AFErrors>) -> ())
-}
-
 class CaracterVC: UIViewController {
 
     // MARK: - Properties -
 
-    private lazy var marvelHeroes = [MarvelCharacter]()
-    private var networkDelegat: NetworkManagerProtocol? = NetworkManager()
+    var presenter: MainViewPresentorProtocol?
     let tableView = UITableView()
 
     // MARK: - ViewController lifecycle -
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchMarvelCharacters()
     }
 
     override func viewDidLoad() {
@@ -49,19 +43,17 @@ class CaracterVC: UIViewController {
         tableView.register(MarvelHerousCells.self, forCellReuseIdentifier: MarvelHerousCells.reuseID)
         tableView.rowHeight = 80
     }
+}
 
-    private func fetchMarvelCharacters() {
-        networkDelegat?.getHerousFromURL(completion: { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let characters):
-                print("\(characters.count)")
-                self.marvelHeroes = characters
-                self.tableView.reloadData()
-            case .failure(let error):
-                print("\(error.rawValue)")
-            }
-        })
+// MARK: - MainViewProtocol -
+
+extension CaracterVC: MainViewProtocol {
+    func succses() {
+        tableView.reloadData()
+    }
+
+    func failure() {
+        // аллерт
     }
 }
 
@@ -69,7 +61,7 @@ class CaracterVC: UIViewController {
 
 extension CaracterVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return marvelHeroes.count
+        return presenter?.marvelHeroes?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -78,7 +70,7 @@ extension CaracterVC: UITableViewDataSource {
             return cell
         }
 
-        cell.herousName.text = marvelHeroes[indexPath.row].name
+        cell.herousName.text = presenter?.marvelHeroes?[indexPath.row].name
 
         return cell
     }
@@ -88,11 +80,15 @@ extension CaracterVC: UITableViewDataSource {
 
 extension CaracterVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let presenter = presenter else { return /* Вернуть алерт */}
+        
         tableView.deselectRow(at: indexPath, animated: true)
-        let name = marvelHeroes[indexPath.row].name
-        let comics = marvelHeroes[indexPath.row].comics
+        let charactersName = presenter.marvelHeroes?[indexPath.row].name
+        let comics = presenter.marvelHeroes?[indexPath.row].comics.items
 
-        let newViewController = MagazineVC(with: name, and: comics)
+        guard let magazines = comics, let name = charactersName else { return }
+
+        let newViewController = MainScreenBuilder.createDetailModul(name: name, comics: magazines)
         self.present(newViewController, animated: true)
     }
 }
