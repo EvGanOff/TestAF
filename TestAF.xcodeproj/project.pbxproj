@@ -111,14 +111,6 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
-		5E7E9FB72837E293009C5092 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-				5E7E9FB22837D7E2009C5092 /* DetailModule */,
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		5E90A15B2817230900C3F6DF = {
 			isa = PBXGroup;
 			children = (
@@ -263,7 +255,7 @@
 				5EB7AB17282E5C4600D01476 /* Extentions */,
 				5EB7AB21282FFF7F00D01476 /* Manegers */,
 				5E7E9F8C2836BDF1009C5092 /* MainModule */,
-				5E7E9FB72837E293009C5092 /* New Group */,
+				5E7E9FB22837D7E2009C5092 /* DetailModule */,
 			);
 			path = Source;
 			sourceTree = "<group>";
